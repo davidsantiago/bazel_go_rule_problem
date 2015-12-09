@@ -1,0 +1,38 @@
+load("/tools/build_rules/go/def", "go_binary", "go_library", "go_prefix")
+load("/tools/build_rules/local_go_prefix", "local_go_prefix")
+
+local_go_prefix("github.com/golang/protobuf/")
+
+go_library(
+  name = "proto",
+  srcs = [
+    "proto/clone.go",
+    "proto/decode.go",
+    "proto/encode.go",
+    "proto/equal.go",
+    "proto/extensions.go",
+    "proto/lib.go",
+    "proto/message_set.go",
+    # pointer_reflect.go is an appengine-safe alternative, but we
+    # don't have build tag support yet (if we ever want appengine).
+    "proto/pointer_unsafe.go",
+    "proto/properties.go",
+    "proto/text.go",
+    "proto/text_parser.go",
+  ],
+)
+
+go_binary(
+  name = "protoc-gen-go",
+  srcs = [
+    "protoc-gen-go/doc.go",
+#    "protoc-gen-go/link_grpc.go",
+    "protoc-gen-go/main.go",
+    "protoc-gen-go/generator/generator.go",
+    "protoc-gen-go/internal/grpc/grpc.go",
+  ],
+  deps = [
+    ":proto",
+  ],
+  go_prefix = ":local_go_prefix",
+)

@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message SadnessDescriptor {
+  string sadness_level = 1;
+}
